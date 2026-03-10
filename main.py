@@ -47,6 +47,11 @@ def main():
         ("Random", "Heuristic", RRPlayerRandom, RRPlayerHeuristic),
         ("Heuristic", "Minimax", RRPlayerHeuristic, RRPlayerMinimax),
         ("Random", "Minimax", RRPlayerRandom, RRPlayerMinimax),
+
+        # Checking the fairness of RR by comparing the same player against itself 
+        ("Random", "Random", RRPlayerRandom, RRPlayerRandom), 
+        ("Heuristic", "Heuristic", RRPlayerHeuristic, RRPlayerHeuristic), 
+        ("Minimax", "Minimax", RRPlayerMinimax, RRPlayerMinimax), 
     ]
     results = []
     for name_a, name_b, cls_a, cls_b in matchups:

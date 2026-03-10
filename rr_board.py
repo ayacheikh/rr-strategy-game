@@ -24,17 +24,17 @@ class RRBoard:
         self.remove_count = {PLAYER_X: 0, PLAYER_O: 0}
         self.consecutive_passes = 0  # game ends after 2 consecutive passes
         self.move_history = []  # for undo
-        self.count_x = 2  # initial stone counts
+        self.count_x = 2 
         self.count_o = 2
         self._setup_opening(opening_variant)
 
     def _setup_opening(self, variant):
-        if variant == 0:  # standard opening
+        if variant == 0:  
             self.board[7][7] = PLAYER_X
             self.board[7][8] = PLAYER_O
             self.board[8][7] = PLAYER_O
             self.board[8][8] = PLAYER_X
-        else:  # mirrored opening
+        else: 
             self.board[7][7] = PLAYER_O
             self.board[7][8] = PLAYER_X
             self.board[8][7] = PLAYER_X
@@ -51,12 +51,12 @@ class RRBoard:
             player = self.current_player
 
         opp = self._get_opponent(player)
-        moves = set()
+        moves = set() 
 
         for r in range(ROWS):
             for c in range(COLS):
                 if self.board[r][c] != opp:
-                    continue  # start from opponent's stones
+                    continue  # start from opponent's piece
                 for dr, dc in DIRECTIONS:
                     nr, nc = r + dr, c + dc
                     if not self._in_bounds(nr, nc):
@@ -65,14 +65,13 @@ class RRBoard:
                         if self._get_bracketed_tiles(nr, nc, player):  # must bracket at least one
                             moves.add((nr, nc))
 
-        return list(moves)
+        return list(moves) # list of valid moves
 
     def must_pass(self, player=None):
         return len(self.get_valid_moves(player)) == 0  # no legal moves
 
 
     # Helper func to get titles that are bracketed 
-    # 
     def _get_bracketed_tiles(self, row, col, player):
         opp = self._get_opponent(player)
         bracketed = set()
@@ -80,14 +79,14 @@ class RRBoard:
         for dr, dc in DIRECTIONS:
             r, c = row + dr, col + dc
             path = []
-            while self._in_bounds(r, c) and self.board[r][c] == opp:  # follow line of opponent stones
+            while self._in_bounds(r, c) and self.board[r][c] == opp:  # follow line of opponent piece
                 path.append((r, c))
                 r += dr
                 c += dc
-            if path and self._in_bounds(r, c) and self.board[r][c] == player:  # closed by our stone
+            if path and self._in_bounds(r, c) and self.board[r][c] == player:  # closed by our piece
                 bracketed.update(path)
 
-        return bracketed
+        return bracketed # set of bracketed tiles
 
     def apply_move(self, row, col, use_remove, player=None, *, _skip_validate=False):
         if player is None:
@@ -105,14 +104,14 @@ class RRBoard:
 
         prev_remove = self.last_move_was_remove[player]  # save for undo
 
-        self.board[row][col] = player  # place stone
+        self.board[row][col] = player  # place piece
         if player == PLAYER_X:
             self.count_x += 1
         else:
             self.count_o += 1
 
         n = len(bracketed)
-        if use_remove:  # remove bracketed opponent stones
+        if use_remove:  # remove bracketed opponent pieces
             if opp == PLAYER_X:
                 self.count_x -= n
             else:
@@ -150,7 +149,7 @@ class RRBoard:
         (row, col), use_remove, player, bracketed, prev_remove = entry
         opp = self._get_opponent(player)
 
-        self.board[row][col] = EMPTY  # remove placed stone
+        self.board[row][col] = EMPTY  # remove placed piece
         if player == PLAYER_X:
             self.count_x -= 1
         else:
@@ -158,9 +157,9 @@ class RRBoard:
 
         n = len(bracketed)
         for r, c in bracketed:
-            self.board[r][c] = opp  # restore bracketed stones to opponent
+            self.board[r][c] = opp  # restore bracketed pieces to opponent
 
-        if use_remove:  # undo removal
+        if use_remove:  # undo the remove
             if opp == PLAYER_X:
                 self.count_x += n
             else:
@@ -175,7 +174,7 @@ class RRBoard:
                 self.count_x -= n
 
         self.last_move_was_remove[player] = prev_remove
-        self.current_player = player  # revert to original player
+        self.current_player = player  # revert to the original player
         return True
 
     def apply_pass(self, player=None):
@@ -183,7 +182,7 @@ class RRBoard:
             player = self.current_player
         self.consecutive_passes += 1
         self.current_player = self._get_opponent(player)  # pass turn
-        self.move_history.append((None, None, player))  # None indicates pass
+        self.move_history.append((None, None, player))  # None means a pass
         return True
 
     def undo_pass(self):
@@ -218,7 +217,7 @@ class RRBoard:
             return True
         if self.count_x == 0 or self.count_o == 0:  # one side eliminated
             return True
-        if self._is_full():  # board full
+        if self._is_full():  # check if board is full
             return True
         if not self.must_pass(self.current_player):
             return False

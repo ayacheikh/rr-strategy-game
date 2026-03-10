@@ -61,7 +61,7 @@ class RRPlayerMinimax:
                 board.apply_move(row, col, use_remove, player, _skip_validate=True)
                 s = self._minimax(board, depth - 1, not maximizing, alpha, beta)
                 board.undo_move()
-                if is_max:  # our turn
+                if is_max:
                     best = max(best, s)
                     alpha = max(alpha, best)
                 else:  # opponent's turn
@@ -78,4 +78,4 @@ class RRPlayerMinimax:
         count_x, count_o = board.get_counts()
         count_me = count_x if self.player_num == PLAYER_X else count_o
         count_opp = count_o if self.player_num == PLAYER_X else count_x
-        return 10 * (count_me - count_opp)  # simple evaluation
+        return 10 * (count_me - count_opp)  

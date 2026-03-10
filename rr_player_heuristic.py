@@ -40,7 +40,7 @@ class RRPlayerHeuristic:
         count_me = count_x if self.player_num == PLAYER_X else count_o
         count_opp = count_o if self.player_num == PLAYER_X else count_x
         score = 10 * (count_me - count_opp)  # piece differential
-        # Bonus for corners (stable in Othello-like games)
+       
         corners = [(0, 0), (0, 15), (15, 0), (15, 15)]
         for r, c in corners:
             v = board.board[r][c]

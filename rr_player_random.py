@@ -18,7 +18,7 @@ class RRPlayerRandom:
             board.apply_pass(self.player_num)  # must pass when no moves
             return
         row, col = random.choice(valid_moves)  # pick random valid cell
-        # Random choice: remove vs reverse (50/50 when both allowed)
+        
         use_remove = random.choice([True, False])
         if use_remove and board.last_move_was_remove.get(self.player_num, False):
             use_remove = False  # can't remove twice in a row
